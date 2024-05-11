@@ -1,0 +1,33 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(255)
+  phone     String?
+  email     String?
+  hide      Boolean  @default(false)
+  projects  Projects[]
+}
+
+model Projects {
+    id                 Int       @id @default(autoincrement())
+    createdAt          DateTime  @default(now())
+    updatedAt          DateTime  @updatedAt
+    dateAgreedOn       DateTime? @default(now())
+    datePlannedStart   DateTime? @updatedAt
+    datePlannedEnd     DateTime? @updatedAt
+    dateWorkStarted    DateTime? @updatedAt
+    dateWorkEnded      DateTime? @updatedAt
+    notes              String?
+    client             Client    @relation(fields: [clientId], references: [id])
+    clientId           Int       @unique
+    staffAssigned      String?
+    projectEstimate    Float?
+    finalAmount        Float?
+    staffingCost       Float?
+}
